@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import { CarouselMain } from './Components/Structure/CarouselMain.jsx';
 import Button from '@material-ui/core/Button'
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import background from './Components/img/background.jpg';
+
 function App() {
   return (
     <div className="App" >
