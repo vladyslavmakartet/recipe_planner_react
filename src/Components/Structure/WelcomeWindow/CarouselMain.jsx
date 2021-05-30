@@ -21,8 +21,11 @@ export const CarouselMain = () => {
 
     return (
         <Carousel
-            autoPlay="true"
+            autoPlay={true}
             fullHeightHover={false}
+            animation="slide"
+            interval="4000"
+            
         >
             {
                 items.map((item, i) => <Item key={i} item={item} />)

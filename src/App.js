@@ -1,68 +1,30 @@
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import { CarouselMain } from './Components/Structure/CarouselMain.jsx';
-import Button from '@material-ui/core/Button'
-import ButtonGroup from '@material-ui/core/ButtonGroup';
+import { CarouselMain } from './Components/Structure/WelcomeWindow/CarouselMain.jsx';
+import CreateButtonMain from './Components/Structure/WelcomeWindow/CreateButtonMain';
+import LoadButtonMain from './Components/Structure/WelcomeWindow/LoadButtonMain';
+import { useState } from 'react'
+import Menu from './Components/Structure/MenuWindow/Menu'
 
 function App() {
+  const [showCreateRecipe, setShowCreateRecipe] = useState(true)
   return (
     <div className="App" >
-      <Container fullWidth={true} className="container">
-        <Grid
-          container
-          direction="row"
-          justify="space-evenly"
-          alignItems="center"
-        >
-          <Grid
-            item
-            direction="column"
-          >
+      <Container className="container">
+        {showCreateRecipe && <Grid container direction="row" justify="space-evenly" alignItems="center">
+          <Grid item >
             <CarouselMain />
           </Grid>
-          <Grid
-
-            item
-            direction="column"
-          >
-            {/* <Grid container
-              direction="column"
-              justify="center"
-              alignItems="center"
-              spacing={4}
-              width="100%"
-            >
-
-               <Grid item>
-                <Button size="large" variant="contained" color="secondary">Creat</Button>
-              </Grid>
-              <Grid item>
-                <Button size="large" variant="contained" color="secondary">Upload</Button>
-              </Grid> 
-              <ButtonGroup
-                orientation="vertical"
-                color="primary"
-                aria-label="vertical contained primary button group"
-                variant="contained"
-                size="large"
-                >
-                  <Button size="large" variant="contained" color="secondary">Creat</Button>
-                  <Button size="large" variant="contained" color="secondary">Upload</Button>
-              </ButtonGroup>
-            </Grid> */}
+          <Grid item >
             <div className="btn">
-
-              {/* <div class="tooltip">Hover over me
-                <span class="tooltiptext">Tooltip text</span>
-              </div> */}
-
-
-              <Button style={{textTransform: "none"}} className="tooltip" size="large" variant="contained" color="#969696">Creat<span class="tooltiptext">Create recipes.</span></Button>
-              <Button style={{textTransform: "none"}} className="tooltip" size="large" variant="contained" color="#969696">Load<span class="tooltiptext">Load recipes from the server.</span></Button>
-
+              <CreateButtonMain onCreate={() => setShowCreateRecipe(!showCreateRecipe)} />
+              <LoadButtonMain onLoad={() => setShowCreateRecipe(!showCreateRecipe)} />
             </div>
           </Grid>
-        </Grid>
+        </Grid>}
+        {/* <LoadButtonMain onLoad={() => setShowCreateRecipe(!showCreateRecipe)} /> */}
+        {showCreateRecipe ? <></> : <Menu /> }
+        {/* {showCreateRecipe ? <></> : <LoadButtonMain onLoad={() => setShowCreateRecipe(!showCreateRecipe)} /> } */}
       </Container>
     </div>
   );
