@@ -217,3 +217,7 @@ margin-bottom: 10px;
     position: absolute;
     bottom: -75%;
   }
+  .RecipeName{
+    cursor: pointer;
+    background-color: brown;
+  }

@@ -4,16 +4,9 @@ import Button from '@material-ui/core/Button'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import TextField from '@material-ui/core/TextField';
 import { useState } from 'react'
-import PropTypes from 'prop-types'
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FormControl from '@material-ui/core/FormControl';
 const InputForms = ({ onAdd, myClick }) => {
-
-
-
-
-
 
     const [recipeName, setRecipeName] = useState('')
     const [recipeDescription, setRecipeDescription] = useState('')
@@ -28,19 +21,19 @@ const InputForms = ({ onAdd, myClick }) => {
             (item) => item.ingredientName === '' || item.ingredientUnit === '' || item.ingredientQuantity === '');
 
 
-        if (someEmpty){
-            IngredientList.map((time, index) =>{
+        if (someEmpty) {
+            IngredientList.map((time, index) => {
                 const allPrev = [...IngredientList];
 
-                if (IngredientList[index].ingredientName ===""){
+                if (IngredientList[index].ingredientName === "") {
                     allPrev[index].errors.ingredientName = "Ingredient's name is required";
                 }
 
-                if (IngredientList[index].ingredientQuantity ===""){
+                if (IngredientList[index].ingredientQuantity === "") {
                     allPrev[index].errors.ingredientQuantity = "Ingredient's quantity is required";
                 }
 
-                if (IngredientList[index].ingredientUnit ===""){
+                if (IngredientList[index].ingredientUnit === "") {
                     allPrev[index].errors.ingredientUnit = "Ingredient's unit is required";
                 }
 
@@ -57,12 +50,12 @@ const InputForms = ({ onAdd, myClick }) => {
             alert('Please fill all the inputs and add ingredients')
             return
         }
-        let IngredientListFiltered = IngredientList.map(function(item) {
+        let IngredientListFiltered = IngredientList.map(function (item) {
             delete item.errors;
             return item
         });
-        onAdd({ recipeName, recipeDescription, IngredientListFiltered})
         myClick(false)
+        onAdd({ recipeName, recipeDescription, IngredientListFiltered })
         alert('The recipe has been added!')
     }
 
@@ -96,12 +89,12 @@ const InputForms = ({ onAdd, myClick }) => {
                     ...item,
                     [event.target.name]: event.target.value,
 
-                    errors:{
+                    errors: {
 
                         ...item.errors,
                         [event.target.name]:
-                        event.target.value.length > 0
-                        ? null: [event.target.name] + "Is required",
+                            event.target.value.length > 0
+                                ? null : [event.target.name] + "Is required",
                     },
                 };
             });
@@ -142,107 +135,97 @@ const InputForms = ({ onAdd, myClick }) => {
                         required
                     />
                 </Grid >
-            
-            {JSON.stringify(IngredientList)}
-             {/* FILTER OUT FOR KEYS */}
-            
-            
-            <div id="Ingredient">
-                {
-                    IngredientList.map((item, index) => (
-                        <Grid key={'item-${index}'} container style={{ marginTop: "20px" }} alignItems="center" justify="center" direction="row" spacing={5} wrap="wrap">
-                            <Grid item xs={1} align="center" >
-                                #{index + 1}
 
+                {/* {JSON.stringify(IngredientList)} */}
+
+
+                <div id="Ingredient">
+                    {
+                        IngredientList.map((item, index) => (
+                            <Grid key={`item-${index}`} container style={{ marginTop: "20px" }} alignItems="center" justify="center" direction="row" spacing={5} wrap="wrap">
+                                <Grid item xs={1} align="center" >
+                                    #{index + 1}
+
+
+                                </Grid>
+                                <Grid item xs={3} >
+                                    <TextField
+                                        required
+                                        label="Name"
+                                        placeholder="e.g Meat"
+                                        variant="outlined"
+                                        name="ingredientName"
+                                        error={item.errors.ingredientName ? true : false}
+
+                                        value={item.ingredientName}
+                                        onChange={(e) => onChangeIngredient(index, e)}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={3} >
+                                    <TextField
+                                        label="Quantity"
+                                        type="number"
+                                        placeholder="e.g 10"
+                                        variant="outlined"
+                                        inputProps={{ min: "0.01", step: "0.01" }}
+                                        error={item.errors.ingredientQuantity ? true : false}
+
+                                        required
+                                        name="ingredientQuantity"
+                                        className={
+                                            item.errors.ingredientQuantity
+                                        }
+                                        value={item.ingredientQuantity}
+                                        onChange={(e) => onChangeIngredient(index, e)}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+
+                                    />
+                                </Grid>
+                                <Grid item xs={3} >
+                                    <TextField
+                                        required
+                                        label="Unit"
+                                        placeholder="e.g Kg"
+                                        variant="outlined"
+                                        name="ingredientUnit"
+                                        error={item.errors.ingredientUnit ? true : false}
+
+                                        className={
+                                            item.errors.ingredientUnit
+                                        }
+                                        value={item.ingredientUnit}
+                                        onChange={(e) => onChangeIngredient(index, e)}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item >
+                                    <IconButton aria-label="delete" color="primary" onClick={(e) => handleRemoveIngredient(e, index)}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={3} >
-                                <TextField
-                                    required
-                                    label="Name"
-                                    placeholder="e.g Meat"
-                                    variant="outlined"
-                                    name="ingredientName"
-                                    error={item.errors.ingredientName ? true : false}
 
-                                    value={item.ingredientName}
-                                    onChange={(e) => onChangeIngredient(index, e)}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={3} >
-                                <TextField
-                                    label="Quantity"
-                                    type="number"
-                                    placeholder="e.g 10"
-                                    variant="outlined"
-                                    inputProps={{ min: "0.01", step: "0.01" }}
-                                    error={item.errors.ingredientQuantity ? true : false}
+                        ))
+                    }
 
-                                    required
-                                    name="ingredientQuantity"
-                                    className={
-                                        item.errors.ingredientQuantity
-                                    }
-                                    value={item.ingredientQuantity}
-                                    onChange={(e) => onChangeIngredient(index, e)}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-
-                                />
-                            </Grid>
-                            <Grid item xs={3} >
-                                <TextField
-                                    required
-                                    label="Unit"
-                                    placeholder="e.g Kg"
-                                    variant="outlined"
-                                    name="ingredientUnit"
-                                    error={item.errors.ingredientUnit ? true : false}
-
-                                    className={
-                                        item.errors.ingredientUnit
-                                    }
-                                    value={item.ingredientUnit}
-                                    onChange={(e) => onChangeIngredient(index, e)}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item >
-                                <IconButton aria-label="delete" color="primary" onClick={(e) => handleRemoveIngredient(e, index)}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Grid>
-                        </Grid>
-
-                    ))
-                }
-
-            </div>
+                </div>
 
 
-            <ButtonGroup color="primary" aria-label="outlined primary button group" fullWidth={true} style={{ marginTop: "10px" }}>
-                <Button onClick={handleAddIngredient} type="submit" form="Ingredient" size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Add ingredient</Button>
-
-                {/* <Button onClick={addIngredient} type="submit" form="Ingredient" size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Add ingredient</Button> */}
-                <Button type='submit' form="Recipe" size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Save recipe</Button>
-            </ButtonGroup>
+                <ButtonGroup color="primary" aria-label="outlined primary button group" fullWidth={true} style={{ marginTop: "10px" }}>
+                    <Button onClick={handleAddIngredient} type="submit" form="Ingredient" size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Add ingredient</Button>
+                    <Button type="submit" form="Recipe" size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Save recipe</Button>
+                </ButtonGroup>
             </form >
 
         </>
     )
 }
-
-// InputForms.propTypes = {
-//     recipeName: PropTypes.string,
-//     recipeDescription: PropTypes.string,
-//     ingredientName: PropTypes.string,
-//     ingredientQuantity: PropTypes.number,
-//     ingredientUnit: PropTypes.string,
-// }
 
 export default InputForms
