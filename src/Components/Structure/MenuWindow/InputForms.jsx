@@ -8,27 +8,8 @@ import PropTypes from 'prop-types'
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FormControl from '@material-ui/core/FormControl';
-const InputForms = ({ onAdd }) => {
-    // const [IngredientsList, setIngredientsList] = useState([
-    //     {
-    //         id: 1,
-    //         name: "apple",
-    //         quantity: 10,
-    //         unit: "pcs",
-    //     },
-    //     {
-    //         id: 2,
-    //         name: "Banana",
-    //         quantity: 3,
-    //         unit: "pieces",
-    //     },
-    //     // {
-    //     //     id: 3,
-    //     //     name: "lemon",
-    //     //     quantity: 4,
-    //     //     unit: "balbinka",
-    //     // },
-    // ])
+const InputForms = ({ onAdd, myClick }) => {
+
 
 
 
@@ -36,9 +17,6 @@ const InputForms = ({ onAdd }) => {
 
     const [recipeName, setRecipeName] = useState('')
     const [recipeDescription, setRecipeDescription] = useState('')
-    // const [ingredientName, setIngredientName] = useState('')
-    // const [ingredientQuantity, setIngredientQuantity] = useState('')
-    // const [ingredientUnit, setIngredientUnit] = useState('')
     const [IngredientList, setIngredientList] = useState([])
 
     const prevIsValid = () => {
@@ -75,31 +53,18 @@ const InputForms = ({ onAdd }) => {
     const onSubmit = (e) => {
         e.preventDefault()
 
-        if (!recipeName || !recipeDescription) {// || !ingredientName || !ingredientQuantity || !ingredientUnit) {
-            alert('Please fill all the inputs')
+        if (!recipeName || !recipeDescription || (IngredientList.length <= 0)) {
+            alert('Please fill all the inputs and add ingredients')
             return
         }
-        onAdd({ recipeName, recipeDescription, ingredientName, ingredientQuantity, ingredientUnit })
-        setRecipeName('')
-        setRecipeDescription('')
-        setIngredientName('')
-        setIngredientQuantity('')
-        setIngredientUnit('') // change to add list of ingredients 
+        let IngredientListFiltered = IngredientList.map(function(item) {
+            delete item.errors;
+            return item
+        });
+        onAdd({ recipeName, recipeDescription, IngredientListFiltered})
+        myClick(false)
+        alert('The recipe has been added!')
     }
-
-    // const addIngredient = (e) => {
-    //     e.preventDefault()
-
-    //     if (!ingredientName || !ingredientQuantity || !ingredientUnit) {
-    //         alert('Please fill all the ingredient\'s inputs')
-    //         return
-    //     }
-    //     //onAddIngredient({ ingredientName, ingredientQuantity, ingredientUnit })
-    //     console.log("Hello its me")
-    //     setIngredientName('')
-    //     setIngredientQuantity('')
-    //     setIngredientUnit('') // change to add list of ingredients 
-    // }
 
     const handleAddIngredient = (e) => {
         e.preventDefault();
@@ -149,7 +114,7 @@ const InputForms = ({ onAdd }) => {
 
     return (
         <>
-            <form onSubmit={onSubmit} id="NameAndDescription">
+            <form onSubmit={onSubmit} id="Recipe">
                 <Grid container className="scrollbar" id="style-4">
                     <TextField
                         id="outlined-full-width"
@@ -177,17 +142,20 @@ const InputForms = ({ onAdd }) => {
                         required
                     />
                 </Grid >
-            </form >
+            
             {JSON.stringify(IngredientList)}
-            <form id="Ingredient">
+             {/* FILTER OUT FOR KEYS */}
+            
+            
+            <div id="Ingredient">
                 {
                     IngredientList.map((item, index) => (
                         <Grid key={'item-${index}'} container style={{ marginTop: "20px" }} alignItems="center" justify="center" direction="row" spacing={5} wrap="wrap">
-                            <Grid item xs={1} align="center" justify="center">
+                            <Grid item xs={1} align="center" >
                                 #{index + 1}
 
                             </Grid>
-                            <Grid item xs={3} direction="column">
+                            <Grid item xs={3} >
                                 <TextField
                                     required
                                     label="Name"
@@ -203,7 +171,7 @@ const InputForms = ({ onAdd }) => {
                                     }}
                                 />
                             </Grid>
-                            <Grid item xs={3} direction="column">
+                            <Grid item xs={3} >
                                 <TextField
                                     label="Quantity"
                                     type="number"
@@ -225,7 +193,7 @@ const InputForms = ({ onAdd }) => {
 
                                 />
                             </Grid>
-                            <Grid item xs={3} direction="column">
+                            <Grid item xs={3} >
                                 <TextField
                                     required
                                     label="Unit"
@@ -244,39 +212,26 @@ const InputForms = ({ onAdd }) => {
                                     }}
                                 />
                             </Grid>
-                            <Grid item direction="column">
+                            <Grid item >
                                 <IconButton aria-label="delete" color="primary" onClick={(e) => handleRemoveIngredient(e, index)}>
                                     <DeleteIcon />
                                 </IconButton>
                             </Grid>
-
                         </Grid>
-
-
-
-
-
-
-
 
                     ))
                 }
 
-
-
-
-            </form>
-
-
+            </div>
 
 
             <ButtonGroup color="primary" aria-label="outlined primary button group" fullWidth={true} style={{ marginTop: "10px" }}>
                 <Button onClick={handleAddIngredient} type="submit" form="Ingredient" size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Add ingredient</Button>
 
                 {/* <Button onClick={addIngredient} type="submit" form="Ingredient" size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Add ingredient</Button> */}
-                <Button type='submit' form="NameAndDescription" size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Save recipe</Button>
+                <Button type='submit' form="Recipe" size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Save recipe</Button>
             </ButtonGroup>
-
+            </form >
 
         </>
     )

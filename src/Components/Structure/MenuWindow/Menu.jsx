@@ -10,6 +10,10 @@ const [showAddRecipeForm, setShowAddRecipeForm] = useState(false)
 const addRecipe = (ingredient) => {
     console.log(ingredient)
 }
+const setFalse = (choice)=>
+{
+    !choice && setShowAddRecipeForm(!showAddRecipeForm)
+}
     return (
         <div>
             <MenuHeaderButtons />
@@ -24,7 +28,7 @@ const addRecipe = (ingredient) => {
                 </Grid>
                 <Grid item xs={8} className="right scrollbar containerMenu" id="style-4">
                     {!showAddRecipeForm && <WelcomeMessage />}
-                    {showAddRecipeForm && <InputForms onAdd={addRecipe}/>}
+                    {showAddRecipeForm && <InputForms onAdd={addRecipe} myClick={setFalse}/>}
 
                 </Grid>
             </Grid>
