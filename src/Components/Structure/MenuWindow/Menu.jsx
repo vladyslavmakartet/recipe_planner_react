@@ -7,7 +7,7 @@ import InputForms from './InputForms'
 import WelcomeMessage from './WelcomeMessage'
 const Menu = () => {
 const [showAddRecipeForm, setShowAddRecipeForm] = useState(false)
-const addIngredient = (ingredient) => {
+const addRecipe = (ingredient) => {
     console.log(ingredient)
 }
     return (
@@ -24,7 +24,7 @@ const addIngredient = (ingredient) => {
                 </Grid>
                 <Grid item xs={8} className="right scrollbar containerMenu" id="style-4">
                     {!showAddRecipeForm && <WelcomeMessage />}
-                    {showAddRecipeForm && <InputForms onAdd={addIngredient}/>}
+                    {showAddRecipeForm && <InputForms onAdd={addRecipe}/>}
 
                 </Grid>
             </Grid>
