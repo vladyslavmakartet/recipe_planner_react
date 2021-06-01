@@ -108,7 +108,7 @@ const InputForms = ({ onAdd, myClick }) => {
     return (
         <>
             <form onSubmit={onSubmit} id="Recipe" className="WordWrap">
-                <Grid container className="scrollbar" id="style-4" >
+                <Grid container className="scrollbar " id="style-4" >
                     <TextField
                         id="outlined-full-width"
                         label="Name"
@@ -116,6 +116,7 @@ const InputForms = ({ onAdd, myClick }) => {
                         helperText="Enter recipe's name"
                         fullWidth={true}
                         margin="normal"
+                        className="paragraph"
                         required
                         value={recipeName}
                         onChange={(e) => setRecipeName(e.target.value)}
@@ -125,6 +126,7 @@ const InputForms = ({ onAdd, myClick }) => {
                         id="outlined-multiline-static"
                         label="Description"
                         multiline
+                        className="paragraph"
                         rows={4}
                         placeholder="e.g Some ingredients"
                         variant="outlined"
@@ -142,7 +144,7 @@ const InputForms = ({ onAdd, myClick }) => {
                 <div id="Ingredient">
                     {
                         IngredientList.map((item, index) => (
-                            <Grid key={`item-${index}`} container style={{ marginTop: "20px" }} alignItems="center" justify="center" direction="row" spacing={5} wrap="wrap">
+                            <Grid key={`item-${index}`} container style={{ marginTop: "20px" }} alignItems="center" className="paragraph" justify="center" direction="row" spacing={5} wrap="wrap">
                                 <Grid item xs={1} align="center" >
                                     #{index + 1}
 
@@ -153,6 +155,7 @@ const InputForms = ({ onAdd, myClick }) => {
                                         required
                                         label="Name"
                                         placeholder="e.g Meat"
+                                        className="paragraph"
                                         variant="outlined"
                                         name="ingredientName"
                                         error={item.errors.ingredientName ? true : false}
@@ -169,6 +172,7 @@ const InputForms = ({ onAdd, myClick }) => {
                                         label="Quantity"
                                         type="number"
                                         placeholder="e.g 10"
+                                        className="paragraph"
                                         variant="outlined"
                                         inputProps={{ min: "0.01", step: "0.01" }}
                                         error={item.errors.ingredientQuantity ? true : false}
@@ -179,6 +183,7 @@ const InputForms = ({ onAdd, myClick }) => {
                                             item.errors.ingredientQuantity
                                         }
                                         value={item.ingredientQuantity}
+                                        className="paragraph"
                                         onChange={(e) => onChangeIngredient(index, e)}
                                         InputLabelProps={{
                                             shrink: true,
@@ -193,6 +198,7 @@ const InputForms = ({ onAdd, myClick }) => {
                                         placeholder="e.g Kg"
                                         variant="outlined"
                                         name="ingredientUnit"
+                                        className="paragraph"
                                         error={item.errors.ingredientUnit ? true : false}
 
                                         className={
