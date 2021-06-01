@@ -218,6 +218,28 @@ margin-bottom: 10px;
     bottom: -75%;
   }
   .RecipeName{
+    background: #f4f4f4;
+    padding: 10px 20px;
     cursor: pointer;
-    background-color: brown;
+  }
+
+  .RecipeName{
+    opacity:0.5;
+  }
+  .RecipeName:hover{
+    opacity:1;
+  }
+  .ActionButton:hover{
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+  .RecipeName .ActionButton{
+    display: none;
+  }
+  .RecipeName:hover .ActionButton{
+    display: inline-block;
+  }
+  .WordWrap {
+    word-wrap: break-word;
   }

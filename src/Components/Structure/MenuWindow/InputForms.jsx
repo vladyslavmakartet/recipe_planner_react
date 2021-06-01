@@ -107,8 +107,8 @@ const InputForms = ({ onAdd, myClick }) => {
 
     return (
         <>
-            <form onSubmit={onSubmit} id="Recipe">
-                <Grid container className="scrollbar" id="style-4">
+            <form onSubmit={onSubmit} id="Recipe" className="WordWrap">
+                <Grid container className="scrollbar" id="style-4" >
                     <TextField
                         id="outlined-full-width"
                         label="Name"
@@ -148,7 +148,7 @@ const InputForms = ({ onAdd, myClick }) => {
 
 
                                 </Grid>
-                                <Grid item xs={3} >
+                                <Grid item xs>
                                     <TextField
                                         required
                                         label="Name"
@@ -164,7 +164,7 @@ const InputForms = ({ onAdd, myClick }) => {
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={3} >
+                                <Grid item xs >
                                     <TextField
                                         label="Quantity"
                                         type="number"
@@ -186,7 +186,7 @@ const InputForms = ({ onAdd, myClick }) => {
 
                                     />
                                 </Grid>
-                                <Grid item xs={3} >
+                                <Grid item xs >
                                     <TextField
                                         required
                                         label="Unit"
@@ -217,11 +217,12 @@ const InputForms = ({ onAdd, myClick }) => {
 
                 </div>
 
-
                 <ButtonGroup color="primary" aria-label="outlined primary button group" fullWidth={true} style={{ marginTop: "10px" }}>
                     <Button onClick={handleAddIngredient} type="submit" form="Ingredient" size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Add ingredient</Button>
                     <Button type="submit" form="Recipe" size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Save recipe</Button>
                 </ButtonGroup>
+
+
             </form >
 
         </>
