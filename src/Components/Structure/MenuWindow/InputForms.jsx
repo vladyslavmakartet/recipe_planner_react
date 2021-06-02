@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import TextField from '@material-ui/core/TextField';
-import { useState, useEffect} from 'react'
+import { useState} from 'react'
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 const InputForms = ({ onAdd, RecipeToBeEdited }) => {
@@ -22,7 +22,7 @@ const InputForms = ({ onAdd, RecipeToBeEdited }) => {
 
 
         if (someEmpty) {
-            IngredientList.map((time, index) => {
+            IngredientList.map((item, index) => {
                 const allPrev = [...IngredientList];
 
                 if (IngredientList[index].ingredientName === "") {
