@@ -3,14 +3,14 @@ import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import TextField from '@material-ui/core/TextField';
-import { useState } from 'react'
+import { useState, useEffect} from 'react'
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-const InputForms = ({ onAdd, myClick }) => {
+const InputForms = ({ onAdd, RecipeToBeEdited }) => {
 
-    const [recipeName, setRecipeName] = useState('')
-    const [recipeDescription, setRecipeDescription] = useState('')
-    const [IngredientList, setIngredientList] = useState([])
+    const [recipeName, setRecipeName] = useState(RecipeToBeEdited ? RecipeToBeEdited.recipeName : '')
+    const [recipeDescription, setRecipeDescription] = useState(RecipeToBeEdited ? RecipeToBeEdited.recipeDescription : '')
+    const [IngredientList, setIngredientList] = useState(RecipeToBeEdited ? [...RecipeToBeEdited?.IngredientListFiltered] : [])
 
     const prevIsValid = () => {
         if (IngredientList.length === 0) {
@@ -54,9 +54,9 @@ const InputForms = ({ onAdd, myClick }) => {
             delete item.errors;
             return item
         });
-        myClick(false)
+        
         onAdd({ recipeName, recipeDescription, IngredientListFiltered })
-        alert('The recipe has been added!')
+        RecipeToBeEdited ? alert('The recipe has been modified!'): alert('The recipe has been added!')
     }
 
     const handleAddIngredient = (e) => {
@@ -158,7 +158,7 @@ const InputForms = ({ onAdd, myClick }) => {
                                         className="paragraph"
                                         variant="outlined"
                                         name="ingredientName"
-                                        error={item.errors.ingredientName ? true : false}
+                                        //error={item.errors.ingredientName ? true : false}
 
                                         value={item.ingredientName}
                                         onChange={(e) => onChangeIngredient(index, e)}
@@ -175,13 +175,13 @@ const InputForms = ({ onAdd, myClick }) => {
                                         className="paragraph"
                                         variant="outlined"
                                         inputProps={{ min: "0.01", step: "0.01" }}
-                                        error={item.errors.ingredientQuantity ? true : false}
+                                        //error={item.errors.ingredientQuantity ? true : false}
 
                                         required
                                         name="ingredientQuantity"
-                                        className={
-                                            item.errors.ingredientQuantity
-                                        }
+                                        // className={
+                                        //     item.errors.ingredientQuantity
+                                        // }
                                         value={item.ingredientQuantity}
                                         className="paragraph"
                                         onChange={(e) => onChangeIngredient(index, e)}
@@ -199,11 +199,11 @@ const InputForms = ({ onAdd, myClick }) => {
                                         variant="outlined"
                                         name="ingredientUnit"
                                         className="paragraph"
-                                        error={item.errors.ingredientUnit ? true : false}
+                                        //error={item.errors.ingredientUnit ? true : false}
 
-                                        className={
-                                            item.errors.ingredientUnit
-                                        }
+                                        // className={
+                                        //     item.errors.ingredientUnit
+                                        // }
                                         value={item.ingredientUnit}
                                         onChange={(e) => onChangeIngredient(index, e)}
                                         InputLabelProps={{

@@ -11,11 +11,13 @@ function ShowRecipe({ recipeToShow }) {
                 <Grid item className="paragraphRecipe">
                     {recipeToShow.recipeDescription}
                 </Grid>
-                <div className="paragraphRecipe">You will need:</div>
+                <Grid item className="paragraphRecipe">
+                    You will need:
+                </Grid>
                 <Grid item >
                     {recipeToShow.IngredientListFiltered.map((item, index) => (
                         <Grid key={`item-${index}`} item className="paragraphRecipe">
-                            <div>{item.ingredientName + " " + item.ingredientQuantity + " " + item.ingredientUnit}</div>
+                            {(index + 1) +") " + item.ingredientName + " " + item.ingredientQuantity + " " + item.ingredientUnit}
                         </Grid>
                     ))}
                 </Grid>

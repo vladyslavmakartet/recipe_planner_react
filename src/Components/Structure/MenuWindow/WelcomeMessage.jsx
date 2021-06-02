@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography'
 const WelcomeMessage = () => {
     return (
         <Grid container spacing={0}
-            className="threeD"
+            className="threeD paragraph"
             direction="column"
             alignItems="center"
             justify="center"

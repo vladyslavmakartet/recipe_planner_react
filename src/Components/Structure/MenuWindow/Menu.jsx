@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-// import FunctionContextComponent from './'
 import MenuHeaderButtons from './MenuHeaderButtons'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
@@ -7,29 +6,51 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
 import InputForms from './InputForms'
 import WelcomeMessage from './WelcomeMessage'
-// export const RecipeContext = React.createContext()
+
 import ShowRecipe from './ShowRecipe'
 
+
 const Menu = () => {
-    // const [showWelcome, setShowWelcome] = useState(true)
     const [showAddRecipeForm, setShowAddRecipeForm] = useState(false)
     const [showRecipeData, setShowRecipeData] = useState(false)
+    const [showEditRecipe, setEditRecipe] = useState(false)
     const [RecipeList, setRecipeList] = useState([])
     const [RecipeToBeShown, setRecipeToBeShown] = useState()
+    const [RecipeToEdit, setRecipeToEdit] = useState()
+    const [indexForEditing, setIndexForEditing] = useState()
 
     const addRecipe = (Recipe) => {
-        setRecipeList([...RecipeList, Recipe])
+        if(showEditRecipe && (typeof indexForEditing !== 'undefined' || indexForEditing !== null)){
+            let newArr = [...RecipeList]
+            newArr[indexForEditing] = Recipe
+            setRecipeList(newArr)
+        }
+        else
+            {
+                setRecipeList([...RecipeList, Recipe])
+            } 
+       
+        setShowAddRecipeForm(false)
+        setShowRecipeData(false)
+        setEditRecipe(false)
     }
     const handleRemoveRecipe = (e, index) => {
         e.preventDefault();
         setRecipeList((prev) => prev.filter((item) => item !== prev[index]));
     }
-    const setFalse = (choice) => {
-        !choice && setShowAddRecipeForm(!showAddRecipeForm)
-    }
+
     const handleShowRecipe = (item) => {
         setShowRecipeData(!showRecipeData)
+        setShowAddRecipeForm(false)
+        setEditRecipe(false)
         setRecipeToBeShown(item)
+    }
+    const handleEditRecipe = (item, index) => {
+        setEditRecipe(true)
+        setShowAddRecipeForm(true)
+        setShowRecipeData(false)
+        setRecipeToEdit(item)
+        setIndexForEditing(index)
     }
     return (
         <div>
@@ -58,7 +79,7 @@ const Menu = () => {
                                             <EditOutlinedIcon
                                                 className="ActionButton"
                                                 style={{ cursor: 'pointer' }}
-                                                onClick={() => { }}
+                                                onClick={(e) => { handleEditRecipe(item, index) }}
                                             />
                                         </Grid>
                                         <Grid item xs={1}>
@@ -76,30 +97,69 @@ const Menu = () => {
                                 </Grid>
 
                             ))}
-
-
-
                     </Grid>
-                    {showAddRecipeForm ?
-                        <Button onClick={() => setShowAddRecipeForm(!showAddRecipeForm)} size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Cancel</Button> :
-                        <Button onClick={() => setShowAddRecipeForm(!showAddRecipeForm)} size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Add Recipe</Button>}
-                </Grid>
-                <Grid item xs={8} className="right scrollbar containerMenu WordWrap" id="style-4">
                     {(() => {
-                        if (!showRecipeData && !showAddRecipeForm)
-                            return <WelcomeMessage />;
-                        else if (showAddRecipeForm) {
-                            return <InputForms onAdd={addRecipe} myClick={setFalse} />;
-                        }
-                        else if (showRecipeData)
-                            return <ShowRecipe recipeToShow={RecipeToBeShown} />;
+                        if (showAddRecipeForm)
+                            return <Button onClick={() => (
+                                setShowAddRecipeForm(!showAddRecipeForm),
+                                setEditRecipe(false),
+                                setShowRecipeData(false))}
+                                size="large"
+                                variant="contained"
+                                color="primary"
+                                fullWidth={true}
+                                style={{ textTransform: "none" }}
+                            >
+                                Cancel
+                                </Button>
+                        else if (showRecipeData || showEditRecipe)
+                            return <Button onClick={() => (
+                                setShowAddRecipeForm(false),
+                                setEditRecipe(false),
+                                setShowRecipeData(false)
+                            )}
+                                size="large"
+                                variant="contained"
+                                color="primary"
+                                fullWidth={true}
+                                style={{ textTransform: "none" }}
+                            >
+                                Cancel
+                                </Button>
+
+                        else if (!showAddRecipeForm)
+                            return <Button onClick={() => (
+                                setShowAddRecipeForm(!showAddRecipeForm),
+                                setEditRecipe(false),
+                                setShowRecipeData(false))}
+                                size="large"
+                                variant="contained"
+                                color="primary"
+                                fullWidth={true}
+                                style={{ textTransform: "none" }}
+                            >
+                                Add Recipe
+                                    </Button>
 
                     })()}
 
+                </Grid>
+                <Grid item xs={8} className="right scrollbar containerMenu WordWrap" id="style-4">
+                    {(() => {
+                        if (!showRecipeData && !showAddRecipeForm && !showEditRecipe)
+                            return <WelcomeMessage />;
+                        else if (showAddRecipeForm) {
+                            if (!showEditRecipe)
+                                return <InputForms onAdd={addRecipe} />;
+                            else if (showEditRecipe)
+                                return <InputForms onAdd={addRecipe} RecipeToBeEdited={RecipeToEdit} />
+                            else if (showAddRecipeForm && showEditRecipe)
+                                return setEditRecipe(false)
+                        }
+                        else if (showRecipeData && !showEditRecipe)
+                            return <ShowRecipe recipeToShow={RecipeToBeShown} />;
 
-                    {/* {(!showRecipeData && !showAddRecipeForm) && <WelcomeMessage />}
-                    {(showAddRecipeForm && !showRecipeData) && <InputForms onAdd={addRecipe} myClick={setFalse} />}
-                    {(showRecipeData && !showAddRecipeForm) && <ShowRecipe recipeToShow={RecipeToBeShown} />} */}
+                    })()}
                 </Grid>
             </Grid>
         </div>

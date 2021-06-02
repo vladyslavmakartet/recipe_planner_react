@@ -168,7 +168,7 @@ img {
     height: 50vh;
     /* height: 85%; */
     /* display: grid; */
-    /* border: 2px solid black; */
+    /* border-right: 2px solid black; */
     /* padding: 30px; */
     background-color: rgba(133, 135, 134, 0.97);
     /* border-radius: 10px; */
@@ -295,7 +295,7 @@ img {
 }
 
 .paragraphRecipe {
-    text-indent: 50px;
+    /* text-indent: 50px; */
     text-align: justify;
     letter-spacing: 3px;
 }
