@@ -1,7 +1,7 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 function ShowRecipe({ recipeToShow }) {
-
+    // console.log(JSON.stringify(recipeToShow))
     return (
         <>
             <Grid container className="scrollbar " id="style-4" spacing={3} direction="column">

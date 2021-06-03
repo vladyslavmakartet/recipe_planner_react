@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
@@ -15,6 +15,7 @@ import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import MuiButton from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
+// import $ from 'jquery'; 
 
 const ButtonDisabled = withStyles({
     root: {
@@ -50,21 +51,61 @@ const Menu = () => {
     const [addRecipeForShopping, setAddRecipeForShopping] = useState([])
     const [IngredientListForShopping, setIngredientListForShopping] = useState([])
 
-    const addRecipe = (Recipe) => {
+
+    // useEffect(() => {
+    //     const getRecipes = async () => {
+    //         const recipesFromServer = await fetchRecipes()
+    //         setRecipeList(recipesFromServer)
+    //     }
+    //     getRecipes()
+    // }, [])
+    // // Fetch Recipes
+    // const fetchRecipes = async () => {
+    //     const res = await fetch('http://localhost:5000/recipes')
+    //     const data = await res.json()
+    //     return data
+    // }
+
+
+    const addRecipe = async (Recipe) => {
+
         if (showEditRecipe && (typeof indexForEditing !== 'undefined' && indexForEditing !== null)) {
             let newArr = [...RecipeList]
             newArr[indexForEditing] = Recipe
+            // const res = await fetch('http://localhost:5000/recipes',{
+            //     method: 'POST',
+            //     headers:{
+            //         'Content-type': 'application/json',
+            //     },
+            //     body: JSON.stringify(newArr)
+            // })
+            // const data = res.json()
             setRecipeList(newArr)
+            //setRecipeList(data)
         }
         else {
+            // const res = await fetch('http://localhost:5000/recipes',{
+            //     method: 'POST',
+            //     headers:{
+            //         'Content-type': 'application/json',
+            //     },
+            //     body: JSON.stringify(Recipe)
+            // })
+            // const data = await res.json()
             setRecipeList([...RecipeList, Recipe])
+            //setRecipeList([...RecipeList, data])
         }
 
         setShowAddRecipeForm(false)
         setShowRecipeData(false)
         setShowEditRecipe(false)
+        // console.log(JSON.stringify(RecipeList))
     }
     const handleRemoveRecipe = (e, index) => {
+        //async 
+        // await fetch(`http://localhost:5000/recipes/${index}`,{
+        //     method: 'DELETE',
+        // })
         e.preventDefault();
         setRecipeList((prev) => prev.filter((item) => item !== prev[index]));
         setShowRecipeData(false)
@@ -106,26 +147,40 @@ const Menu = () => {
             return a;
         }, []);
         if (addRecipeForShopping && addRecipeForShopping.length > 0) {
-
-
+            let pushed = false
             let oldArray = JSON.parse(JSON.stringify(IngredientListForShopping));
             for (let i = 0; i < oldArray.length; i++) {
                 for (let j = 0; j < newArr.length; j++) {
-                    if (oldArray[i].ingredientName == newArr[j].ingredientName && oldArray[i].ingredientUnit == newArr[j].ingredientUnit) {
-                        oldArray[i].ingredientQuantity = parseFloat(oldArray[i].ingredientQuantity) + parseFloat(newArr[j].ingredientQuantity)
+                    const exists = Boolean(oldArray.find(x => x.ingredientName === newArr[j].ingredientName && x.ingredientUnit === newArr[j].ingredientUnit))
+                    if (exists) {
+                        if (oldArray[i].ingredientName === newArr[j].ingredientName && oldArray[i].ingredientUnit === newArr[j].ingredientUnit) {
+                            oldArray[i].ingredientQuantity = parseFloat(oldArray[i].ingredientQuantity) + parseFloat(newArr[j].ingredientQuantity)
+                        }
+                    }
+                    else {
+                        oldArray.push(newArr[j])
+                        pushed = true
+                        break
                     }
                 }
+                if(pushed) break
             }
 
 
+
+
+
             setAddRecipeForShopping((prev) => [...prev, item]);
-            setIngredientListForShopping(oldArray) //tyt
+            oldArray.sort((a, b) => (a.ingredientName > b.ingredientName) ? 1 : -1)
+            setIngredientListForShopping(oldArray)
 
         }
         else {
-            setAddRecipeForShopping([item]);//for name
+            setAddRecipeForShopping([item]);
+            newArr.sort((a, b) => (a.ingredientName > b.ingredientName) ? 1 : -1)
             setIngredientListForShopping(newArr)
         }
+
     }
     const RemoveRecipeFromShopping = (index) => {
 
@@ -163,16 +218,30 @@ const Menu = () => {
     return (
         <div>
             <Grid container alignContent="center" justify="center" className="MenuHeaderButtonsMarginBot">
-                {!showShopping ?
-                    <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} color="primary">
-                        <Button style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />}>Load</Button>
-                        <Button style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />}>Save </Button>
-                        {RecipeList.length > 0
-                            ? <Button style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} onClick={() => { handleShopping() }}>Shopping </Button>
-                            : <ButtonWithTooltip tooltipText="Add some recipes before shopping" style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} disabled>
-                                {"Shopping"}
-                            </ButtonWithTooltip>}
-                    </ButtonGroup>
+
+
+                {!showShopping
+                    ? [
+                        RecipeList.length > 0
+                            ? [
+                                <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} color="primary">
+                                    <Button style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />}>Load</Button>
+                                    <Button style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />}>Save </Button>
+                                    <Button style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} onClick={() => { handleShopping() }}>Shopping </Button>
+                                </ButtonGroup>
+                            ]
+                            : [
+                                <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} color="primary">
+                                    <Button style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />}>Load</Button>
+                                    <ButtonWithTooltip tooltipText="Add some recipes before saving" style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />} disabled>{"Save"} </ButtonWithTooltip>
+                                    <ButtonWithTooltip tooltipText="Add some recipes before shopping" style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} disabled>
+                                        {"Shopping"}
+                                    </ButtonWithTooltip>
+                                </ButtonGroup>
+
+
+                            ]
+                    ]
                     :
                     <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} color="primary">
                         <ButtonWithTooltip tooltipText="Close the shopping list before loading" style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />} disabled>{"Load"}</ButtonWithTooltip>
