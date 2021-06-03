@@ -47,7 +47,8 @@ const Menu = () => {
     const [RecipeToBeShown, setRecipeToBeShown] = useState()
     const [RecipeToEdit, setRecipeToEdit] = useState()
     const [indexForEditing, setIndexForEditing] = useState()
-    const [addRecipeForShopping, setAddRecipeForShopping] = useState()
+    const [addRecipeForShopping, setAddRecipeForShopping] = useState([])
+    const [IngredientListForShopping, setIngredientListForShopping] = useState([])
 
     const addRecipe = (Recipe) => {
         if (showEditRecipe && (typeof indexForEditing !== 'undefined' && indexForEditing !== null)) {
@@ -90,29 +91,109 @@ const Menu = () => {
         setShowRecipeData(false)
         setShowEditRecipe(false)
         setAddRecipeForShopping()
+        setIngredientListForShopping()
     }
+    const handleAddRecipeForShopping = (e, item, index) => {
+        e.preventDefault();
+        let newArr = JSON.parse(JSON.stringify(item.IngredientListFiltered));
+        newArr = newArr.reduce((a, c) => {
+            var same = a.find(v => v.ingredientName == c.ingredientName && v.ingredientUnit == c.ingredientUnit);
+            if (same) {
+                same.ingredientQuantity = parseFloat(same.ingredientQuantity) + parseFloat(c.ingredientQuantity);
+            } else {
+                a.push(c);
+            }
+            return a;
+        }, []);
+        if (addRecipeForShopping && addRecipeForShopping.length > 0) {
+
+
+            let oldArray = JSON.parse(JSON.stringify(IngredientListForShopping));
+            for (let i = 0; i < oldArray.length; i++) {
+                for (let j = 0; j < newArr.length; j++) {
+                    if (oldArray[i].ingredientName == newArr[j].ingredientName && oldArray[i].ingredientUnit == newArr[j].ingredientUnit) {
+                        oldArray[i].ingredientQuantity = parseFloat(oldArray[i].ingredientQuantity) + parseFloat(newArr[j].ingredientQuantity)
+                    }
+                }
+            }
+
+
+            setAddRecipeForShopping((prev) => [...prev, item]);
+            setIngredientListForShopping(oldArray) //tyt
+
+        }
+        else {
+            setAddRecipeForShopping([item]);//for name
+            setIngredientListForShopping(newArr)
+        }
+    }
+    const RemoveRecipeFromShopping = (index) => {
+
+
+
+        const newArr2 = [...addRecipeForShopping]
+        newArr2.splice(index, 1)
+        setAddRecipeForShopping(newArr2);
+        let newArr = JSON.parse(JSON.stringify(addRecipeForShopping[index].IngredientListFiltered));
+        newArr = newArr.reduce((a, c) => {
+            var same = a.find(v => v.ingredientName == c.ingredientName && v.ingredientUnit == c.ingredientUnit);
+            if (same) {
+                same.ingredientQuantity = parseFloat(same.ingredientQuantity) + parseFloat(c.ingredientQuantity);
+            } else {
+                a.push(c);
+            }
+            return a;
+        }, []);
+
+        if (IngredientListForShopping && IngredientListForShopping.length > 0) {
+            let oldArray = JSON.parse(JSON.stringify(IngredientListForShopping));
+            for (let i = 0; i < oldArray.length; i++) {
+                for (let j = 0; j < newArr.length; j++) {
+                    if (oldArray[i].ingredientName == newArr[j].ingredientName && oldArray[i].ingredientUnit == newArr[j].ingredientUnit) {
+                        oldArray[i].ingredientQuantity = parseFloat(oldArray[i].ingredientQuantity) - parseFloat(newArr[j].ingredientQuantity)
+                        if (parseFloat(oldArray[i].ingredientQuantity) <= 0)
+                            oldArray.splice(i, 1)
+                    }
+                }
+            }
+            setIngredientListForShopping(oldArray)
+        }
+    }
+
     return (
         <div>
             <Grid container alignContent="center" justify="center" className="MenuHeaderButtonsMarginBot">
-                <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} color="primary">
-                    <Button style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />}>Load</Button>
-                    <Button style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />}>Save </Button>
-                    {RecipeList.length > 0
-                        ? <Button style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} onClick={() => { handleShopping() }}>Shopping </Button>
-                        : <ButtonWithTooltip tooltipText="Add some recipes before shopping" style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} disabled>
-                            {"Shopping"}
-                        </ButtonWithTooltip>}
-
-                </ButtonGroup>
+                {!showShopping ?
+                    <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} color="primary">
+                        <Button style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />}>Load</Button>
+                        <Button style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />}>Save </Button>
+                        {RecipeList.length > 0
+                            ? <Button style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} onClick={() => { handleShopping() }}>Shopping </Button>
+                            : <ButtonWithTooltip tooltipText="Add some recipes before shopping" style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} disabled>
+                                {"Shopping"}
+                            </ButtonWithTooltip>}
+                    </ButtonGroup>
+                    :
+                    <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} color="primary">
+                        <ButtonWithTooltip tooltipText="Close the shopping list before loading" style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />} disabled>{"Load"}</ButtonWithTooltip>
+                        <ButtonWithTooltip tooltipText="Close the shopping list before saving" style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />} disabled>{"Save"} </ButtonWithTooltip>
+                        {RecipeList.length > 0
+                            ? <Button style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} onClick={() => { handleShopping() }}>Shopping </Button>
+                            : <ButtonWithTooltip tooltipText="Add some recipes before shopping" style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} disabled>
+                                {"Shopping"}
+                            </ButtonWithTooltip>}
+                    </ButtonGroup>
+                }
             </Grid>
             <Grid container >
                 <Grid item xs={4} >
                     <Grid item className="left scrollbar containerMenu" style={{ marginTop: "10px", marginBottom: "10px" }} id="style-4" >
                         {(RecipeList.length === 0) ?
-                            <Grid container spacing={0}
+                            <Grid container
                                 direction="column"
                                 alignItems="center"
                                 justify="center"
+
                                 style={{ minHeight: '50vh' }}>
                                 <Grid item xs={12} className="WordWrap paragraph" >
                                     <h4>Currently nothing is here!</h4>
@@ -122,16 +203,16 @@ const Menu = () => {
                                 <Grid key={`item-${index}`} container>
                                     <Grid container className="RecipeName" alignItems="center">
                                         <Grid item xs={10} className="WordWrap paragraph" >
-                                            <h3 onClick={(e) => showShopping ? "" :handleShowRecipe(item)}>
+                                            <h3 onClick={(e) => showShopping ? "" : handleShowRecipe(item)}>
                                                 {item.recipeName}</h3>
                                         </Grid>
                                         {showShopping ?
                                             <>
-                                                <Grid item xs={2} align = "center" >
+                                                <Grid item xs={2} align="center" >
                                                     <AddOutlinedIcon
                                                         className="ActionButton"
                                                         style={{ cursor: 'pointer' }}
-                                                        onClick={() => {setAddRecipeForShopping(item)  }}
+                                                        onClick={(e) => { handleAddRecipeForShopping(e, item, index) }}
                                                     />
                                                 </Grid>
 
@@ -238,12 +319,12 @@ const Menu = () => {
                         else if (showRecipeData && !showEditRecipe)
                             return <ShowRecipe recipeToShow={RecipeToBeShown} />;
                         else if (showShopping)
-                            return <Shopping RecipeForShopping={addRecipeForShopping}/>
+                            return <Shopping RemoveRecipeFromShopping={RemoveRecipeFromShopping} RecipeForShopping={addRecipeForShopping} IngredientListForShopping={IngredientListForShopping} />
 
                     })()}
                 </Grid>
             </Grid>
-        </div>
+        </div >
     )
 }
 

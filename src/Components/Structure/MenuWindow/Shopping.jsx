@@ -1,38 +1,59 @@
-// import React, { useState } from 'react'
-// import Grid from '@material-ui/core/Grid'
+import React from 'react'
+import Grid from '@material-ui/core/Grid'
+import DeleteForeverOutlinedIcon from '@material-ui/icons/DeleteForeverOutlined';
+const Shopping = ({ RemoveRecipeFromShopping, RecipeForShopping, IngredientListForShopping }) => {
 
-// const Shopping = ({ RecipeForShopping }) => {
 
-//     const [RecipeListForShopping, setRecipeListForShopping] = useState(RecipeForShopping && RecipeForShopping)
+    return (
+        <>
+            <Grid container>
+                <Grid container spacing={2}>
+                    {
+                        RecipeForShopping &&
+                        RecipeForShopping.map((item, index) => (
+                            <Grid key={`item-${index}`} item xs={3} >
+                                <div className="RecipeNameShopping">
+                                    <Grid container justify="center" alignItems="center">
+                                        <Grid item xs={10} className="truncate">
+                                            {item.recipeName}
+                                        </Grid>
+                                        <Grid item xs={2} >
+                                            <DeleteForeverOutlinedIcon
+                                                className="ActionButtonShopping"
+                                                color="secondary"
+                                                align="center" justify="center"
+                                                style={{ cursor: 'pointer', fontSize: 17 }}
 
-//     // const update=()=>
-//     // {
-//     //     //RecipeForShopping && setRecipeListForShopping(RecipeListForShopping => [...RecipeListForShopping, RecipeForShopping])
-//     //     setRecipeListForShopping( RecipeForShopping)
+                                                onClick={() => RemoveRecipeFromShopping(index)}
 
-//     // }
-//     //setRecipeListForShopping(RecipeForShopping && [...RecipeListForShopping, RecipeForShopping])
-//     // setIngredientList((prev) => [...prev, inputState]);
-//     return (
-//         <div>
+                                            />
 
-//             {(() => {
-//                 // update()
-//                 if (RecipeListForShopping && (typeof RecipeForShopping !== 'undefined' && RecipeForShopping !== null)) {
-//                     RecipeListForShopping.map((item, index) => (
-//                         <Grid key={`item-${index}`} container>
-//                             <Grid container className="RecipeName" alignItems="center">
-//                                 <Grid item xs={10} className="WordWrap paragraph" >
+                                        </Grid>
+                                    </Grid>
+                                </div>
 
-//                                     {item.recipeName}
-//                                 </Grid>
-//                             </Grid>
-//                         </Grid>
-//                     ))
-//                 }
-//             })()}
-//         </div>
-//     )
-// }
+                            </Grid>
+                        ))
+                    }
 
-// export default Shopping
+                    {IngredientListForShopping &&
+                        <Grid container style={{ marginTop: "10px" }}>
+                            <Grid item >
+                                <Grid item className="paragraphRecipe">
+                                {IngredientListForShopping.length > 0 && "You will need:"}
+                    </Grid>
+                                {IngredientListForShopping.map((item, index) => (
+                                    <Grid key={`item-${index}`} item className="paragraphRecipe">
+                                        {(index + 1) + ") " + item.ingredientName + " " + item.ingredientQuantity + " " + item.ingredientUnit}
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        </Grid>
+                    }
+                </Grid>
+            </Grid>
+        </>
+    )
+}
+
+export default Shopping
