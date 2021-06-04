@@ -38,12 +38,13 @@ const ButtonWithTooltip = ({ tooltipText, disabled, onClick, ...other }) => {
 };
 
 
-const Menu = () => {
+const Menu = ({loadFromServer}) => {
     const [showAddRecipeForm, setShowAddRecipeForm] = useState(false)
     const [showRecipeData, setShowRecipeData] = useState(false)
     const [showEditRecipe, setShowEditRecipe] = useState(false)
     const [showShopping, setShowShopping] = useState(false)
 
+    //const [EmptyServer, setEmptyServer] = useState(true)
     const [RecipeList, setRecipeList] = useState([])
     const [RecipeToBeShown, setRecipeToBeShown] = useState()
     const [RecipeToEdit, setRecipeToEdit] = useState()
@@ -51,20 +52,33 @@ const Menu = () => {
     const [addRecipeForShopping, setAddRecipeForShopping] = useState([])
     const [IngredientListForShopping, setIngredientListForShopping] = useState([])
 
-
-    // useEffect(() => {
-    //     const getRecipes = async () => {
-    //         const recipesFromServer = await fetchRecipes()
-    //         setRecipeList(recipesFromServer)
-    //     }
-    //     getRecipes()
-    // }, [])
-    // // Fetch Recipes
-    // const fetchRecipes = async () => {
-    //     const res = await fetch('http://localhost:5000/recipes')
-    //     const data = await res.json()
-    //     return data
-    // }
+    useEffect(() => {
+        // const getRecipes = async () => {
+        //     const recipesFromServer = await fetchRecipes()
+        //     setRecipeList(recipesFromServer)
+        // }
+        // getRecipes()
+        if(loadFromServer)
+            load()
+    }, [])
+    const load = async ()=>
+    {
+        const getRecipes = async () => {
+            const recipesFromServer = await fetchRecipes()
+            if(recipesFromServer.length <= 0){
+                //setEmptyServer(false)
+                alert('No available recipes found on the server! Create a new one.')
+            }
+            setRecipeList(recipesFromServer)
+        }
+        getRecipes()
+    }
+    // Fetch Recipes
+    const fetchRecipes = async () => {
+        const res = await fetch('http://localhost:5000/RecipeList')
+        const data = await res.json()
+        return data
+    }
 
 
     const addRecipe = async (Recipe) => {
@@ -72,28 +86,29 @@ const Menu = () => {
         if (showEditRecipe && (typeof indexForEditing !== 'undefined' && indexForEditing !== null)) {
             let newArr = [...RecipeList]
             newArr[indexForEditing] = Recipe
-            // const res = await fetch('http://localhost:5000/recipes',{
-            //     method: 'POST',
-            //     headers:{
-            //         'Content-type': 'application/json',
-            //     },
-            //     body: JSON.stringify(newArr)
-            // })
-            // const data = res.json()
-            setRecipeList(newArr)
-            //setRecipeList(data)
+            const res = await fetch('http://localhost:5000/RecipeList/' + Recipe.id,{
+                method: 'PUT',
+                headers:{
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify(newArr[indexForEditing])
+            })
+            const data = await res.json()
+            //setRecipeList(newArr)
+            setRecipeList([data])
+            
         }
         else {
-            // const res = await fetch('http://localhost:5000/recipes',{
-            //     method: 'POST',
-            //     headers:{
-            //         'Content-type': 'application/json',
-            //     },
-            //     body: JSON.stringify(Recipe)
-            // })
-            // const data = await res.json()
-            setRecipeList([...RecipeList, Recipe])
-            //setRecipeList([...RecipeList, data])
+            const res = await fetch('http://localhost:5000/RecipeList',{
+                method: 'POST',
+                headers:{
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify(Recipe)
+            })
+            const data = await res.json()
+            //setRecipeList([...RecipeList, Recipe])
+            setRecipeList([...RecipeList, data])
         }
 
         setShowAddRecipeForm(false)
@@ -101,32 +116,35 @@ const Menu = () => {
         setShowEditRecipe(false)
         // console.log(JSON.stringify(RecipeList))
     }
-    const handleRemoveRecipe = (e, index) => {
-        //async 
-        // await fetch(`http://localhost:5000/recipes/${index}`,{
-        //     method: 'DELETE',
-        // })
+    const handleRemoveRecipe = async (e, itemToDelete, index) => {
+         
         e.preventDefault();
+        await fetch(`http://localhost:5000/RecipeList/${itemToDelete.id}`,{
+            method: 'DELETE',
+        })
         setRecipeList((prev) => prev.filter((item) => item !== prev[index]));
         setShowRecipeData(false)
         setShowAddRecipeForm(false)
         setShowEditRecipe(false)
     }
 
-    const handleShowRecipe = (item) => {
+    const handleShowRecipe = (e, item) => {
+        e.preventDefault();
         setShowRecipeData(!showRecipeData)
         setShowAddRecipeForm(false)
         setShowEditRecipe(false)
         setRecipeToBeShown(item)
     }
-    const handleEditRecipe = (item, index) => {
+    const handleEditRecipe = (e,item, index) => {
+        e.preventDefault();
         setShowEditRecipe(true)
         setShowAddRecipeForm(true)
         setShowRecipeData(false)
         setRecipeToEdit(item)
         setIndexForEditing(index)
     }
-    const handleShopping = () => {
+    const handleShopping = (e) => {
+        e.preventDefault();
         setShowShopping(!showShopping)
         setShowAddRecipeForm(false)
         setShowRecipeData(false)
@@ -225,15 +243,20 @@ const Menu = () => {
                         RecipeList.length > 0
                             ? [
                                 <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} color="primary">
-                                    <Button style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />}>Load</Button>
-                                    <Button style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />}>Save </Button>
-                                    <Button style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} onClick={() => { handleShopping() }}>Shopping </Button>
+                                    <Button style={{ textTransform: "none" }} onClick={load} endIcon={<CloudDownloadOutlinedIcon />}>Load</Button>
+                                    {/* <Button style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />}>Save </Button> */}
+                                    <Button style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} onClick={(e) => { handleShopping(e) }}>Shopping </Button>
                                 </ButtonGroup>
                             ]
                             : [
                                 <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} color="primary">
-                                    <Button style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />}>Load</Button>
-                                    <ButtonWithTooltip tooltipText="Add some recipes before saving" style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />} disabled>{"Save"} </ButtonWithTooltip>
+                                    {/* {EmptyServer 
+                                    ?
+                                        <ButtonWithTooltip tooltipText="No available recipes found on the server! Create a new one." style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />} disabled>{"Load"}</ButtonWithTooltip>
+                                    : */}
+                                        <Button style={{ textTransform: "none" }} onClick={load} endIcon={<CloudDownloadOutlinedIcon />}>Load</Button>
+                                    {/* } */}
+                                    {/* <ButtonWithTooltip tooltipText="Add some recipes before saving" style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />} disabled>{"Save"} </ButtonWithTooltip> */}
                                     <ButtonWithTooltip tooltipText="Add some recipes before shopping" style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} disabled>
                                         {"Shopping"}
                                     </ButtonWithTooltip>
@@ -245,9 +268,9 @@ const Menu = () => {
                     :
                     <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} color="primary">
                         <ButtonWithTooltip tooltipText="Close the shopping list before loading" style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />} disabled>{"Load"}</ButtonWithTooltip>
-                        <ButtonWithTooltip tooltipText="Close the shopping list before saving" style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />} disabled>{"Save"} </ButtonWithTooltip>
+                        {/* <ButtonWithTooltip tooltipText="Close the shopping list before saving" style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />} disabled>{"Save"} </ButtonWithTooltip> */}
                         {RecipeList.length > 0
-                            ? <Button style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} onClick={() => { handleShopping() }}>Shopping </Button>
+                            ? <Button style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} onClick={(e) => { handleShopping(e) }}>Shopping </Button>
                             : <ButtonWithTooltip tooltipText="Add some recipes before shopping" style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} disabled>
                                 {"Shopping"}
                             </ButtonWithTooltip>}
@@ -272,7 +295,7 @@ const Menu = () => {
                                 <Grid key={`item-${index}`} container>
                                     <Grid container className="RecipeName" alignItems="center">
                                         <Grid item xs={10} className="WordWrap paragraph" >
-                                            <h3 onClick={(e) => showShopping ? "" : handleShowRecipe(item)}>
+                                            <h3 onClick={(e) => showShopping ? "" : handleShowRecipe(e, item)}>
                                                 {item.recipeName}</h3>
                                         </Grid>
                                         {showShopping ?
@@ -291,7 +314,7 @@ const Menu = () => {
                                                     <EditOutlinedIcon
                                                         className="ActionButton"
                                                         style={{ cursor: 'pointer' }}
-                                                        onClick={(e) => { handleEditRecipe(item, index) }}
+                                                        onClick={(e) => { handleEditRecipe(e, item, index) }}
                                                     />
                                                 </Grid>
                                                 <Grid item xs={1}>
@@ -299,7 +322,7 @@ const Menu = () => {
                                                         className="ActionButton"
                                                         color="secondary"
                                                         style={{ cursor: 'pointer' }}
-                                                        onClick={(e) => handleRemoveRecipe(e, index)}
+                                                        onClick={(e) => handleRemoveRecipe(e, item, index)}
 
                                                     />
 

@@ -8,6 +8,7 @@ import Menu from './Components/Structure/MenuWindow/Menu'
 
 function App() {
   const [showCreateRecipe, setShowCreateRecipe] = useState(true)
+  const [loadFromServer, setLoadFromServer] = useState(false)
   return (
     <div className="App" >
       <Container className="container">
@@ -18,11 +19,11 @@ function App() {
           <Grid item >
             <div className="btn">
               <CreateButtonMain onCreate={() => setShowCreateRecipe(!showCreateRecipe)} />
-              <LoadButtonMain onLoad={() => setShowCreateRecipe(!showCreateRecipe)} />
+              <LoadButtonMain onLoad={() => {setShowCreateRecipe(!showCreateRecipe), setLoadFromServer(!loadFromServer)}}/>
             </div>
           </Grid>
         </Grid>}
-        {showCreateRecipe ? <></> : <Menu /> }
+        {showCreateRecipe ? <></> : <Menu loadFromServer={loadFromServer}/> }
 
       </Container>
     </div>

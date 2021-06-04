@@ -4,8 +4,8 @@ import Button from '@material-ui/core/Button'
 import Tooltip from '@material-ui/core/Tooltip'
 const CreateButtonMain = ({ onCreate }) => {
     return (
-        //  findDOMNode caused by tooltip 
-        <Tooltip title="Create recipes.">
+
+        <Tooltip title="Create recipes. (Caution: you may overwrite already existing recipes on the server)">
         <Button style={{ textTransform: "none" }}onClick={onCreate}className=" myBtn"size="large"variant="contained"> 
             Creat
             {/* <span className="tooltiptext"style={{ top: "0px", left: "105%" }}>Create recipes.</span> */}

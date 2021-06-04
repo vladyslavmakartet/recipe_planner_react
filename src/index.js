@@ -2,19 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Header from './Components/Structure/Header';
 import Footer from './Components/Structure/Footer';
 import reportWebVitals from './reportWebVitals';
-
+import About from './Components/Structure/About'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 
 ReactDOM.render(
   <React.StrictMode >
-    
-      <Header />
-      <App />
+    <Router>
+      <Route path='/' exact render={() => (
+        <App />
+      )} />
+      <Route path='/about' component={About} />
       <Footer />
-    
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );
