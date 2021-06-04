@@ -7,7 +7,6 @@
 body {
     margin: 0;
     height: 100%;
-    /* background-color: #90E0EF; */
     background-color: black;
     background-image: url("./Components/img/background.png");
     background-position: center center;
@@ -112,68 +111,6 @@ img {
     width: 20vw;
     justify-content: space-around;
 }
-
-
-/* Tooltip container */
-
-
-/* .tooltip {
-    position: relative;
-    display: block;
-    /* border-bottom: 1px dotted black; If you want dots under the hoverable text 
-
-
-}
-*/
-
-
-/* Tooltip text */
-
-
-/* 
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-    top: -10px;
-    left: 105%;
-    /* Position the tooltip text - see examples below! 
-
-position: absolute;
-z-index: 1;
-
-}
-*/
-
-
-/* Show the tooltip text when you mouse over the tooltip container */
-
-
-/* .tooltip:hover .tooltiptext {
-    visibility: visible;
-} */
-
-
-/* 
-.tooltip .tooltiptext::after {
-    content: " ";
-    position: absolute;
-    top: 50%;
-    right: 100%;
-    /* To the left of the tooltip 
-
-margin-top: -5px;
-border-width: 5px;
-border-style: solid;
-border-color: transparent black transparent transparent;
-
-}
-*/
-
 .myBtn {
     color: #969696
 }
@@ -181,12 +118,7 @@ border-color: transparent black transparent transparent;
 .left {
     width: 100%;
     height: 50vh;
-    /* height: 85%; */
-    /* display: grid; */
-    /* border-right: 2px solid black; */
-    /* padding: 30px; */
     background-color: rgba(133, 135, 134, 0.97);
-    /* border-radius: 10px; */
     overflow-y: auto;
     scroll-behavior: smooth;
     overflow-x: hidden;
@@ -195,13 +127,8 @@ border-color: transparent black transparent transparent;
 .right {
     width: 100%;
     height: 50vh;
-    /* display: grid;
-  grid-template-columns: 36% 64%; */
-    /* margin: 50px auto; */
-    /* border: 2px solid black; */
     padding: 30px;
     background-color: rgba(133, 135, 134, 0.97);
-    /* border-radius: 10px; */
     overflow-y: auto;
     scroll-behavior: smooth;
     overflow-x: hidden;
@@ -246,11 +173,6 @@ border-color: transparent black transparent transparent;
     padding: 10px 20px;
     cursor: pointer;
 }
-
-
-/* .border {
-    border-radius: 10px;
-} */
 
 .RecipeName {
     opacity: 0.5;
@@ -312,10 +234,6 @@ border-color: transparent black transparent transparent;
 .threeD {
     color: #636363;
     white-space: nowrap;
-    /* position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); */
     font-size: 3em;
     font-family: sans-serif;
     letter-spacing: 0.1em;
@@ -325,7 +243,6 @@ border-color: transparent black transparent transparent;
 
 .threeD:hover {
     transition: 0.3s;
-    /* transform: scale(1.1)translate(-50%, -50%); */
     text-shadow: 1px -1px 0 #969696, 1px -2px 0 #969696, 1px -3px 0 #969696, 1px -4px 0 #969696, 1px -5px 0 #969696, 1px -6px 0 #969696, 1px -7px 0 #969696, 1px -8px 0 #969696, 5px -13px 15px whitesmoke, 5px -13px 25px whitesmoke;
 }
 
@@ -366,7 +283,5 @@ border-color: transparent black transparent transparent;
 }
 .list {
     list-style: inside;
-    /* list-style-type: circle; */
     margin-left: 20px;
-
 }

@@ -7,7 +7,6 @@ const LoadButtonMain = ({ onLoad }) => {
     return (
         <Tooltip title="Load last recipes from the server.">
             <Button style={{ textTransform: "none" }} onClick={onLoad}  className="tooltip myBtn" size="large" variant="contained">Load
-            {/* <span className="tooltiptext">Load recipes from the server.</span> */}
             </Button>
         </Tooltip>
 

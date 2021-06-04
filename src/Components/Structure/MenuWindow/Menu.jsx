@@ -38,7 +38,7 @@ const ButtonWithTooltip = ({ tooltipText, disabled, onClick, ...other }) => {
 };
 
 
-const Menu = ({loadFromServer}) => {
+const Menu = ({ loadFromServer }) => {
     const [showAddRecipeForm, setShowAddRecipeForm] = useState(false)
     const [showRecipeData, setShowRecipeData] = useState(false)
     const [showEditRecipe, setShowEditRecipe] = useState(false)
@@ -51,16 +51,14 @@ const Menu = ({loadFromServer}) => {
     const [IngredientListForShopping, setIngredientListForShopping] = useState([])
 
     useEffect(() => {
-        if(loadFromServer){
+        if (loadFromServer) {
             load()
         }
     }, [])
-    const load = async ()=>
-    {
+    const load = async () => {
         const getRecipes = async () => {
             const recipesFromServer = await fetchRecipes()
-            if(recipesFromServer.length <= 0){
-                //setEmptyServer(false)
+            if (recipesFromServer.length <= 0) {
                 alert('No available recipes found on the server! Create a new one.')
             }
             setRecipeList(recipesFromServer)
@@ -69,7 +67,6 @@ const Menu = ({loadFromServer}) => {
     }
     // Fetch Recipes
     const fetchRecipes = async () => {
-        // const res = await fetch('http://localhost:8080/RecipeList')
         const res = await fetch('https://recipe-planner-pw.herokuapp.com/RecipeList')
         const data = await res.json()
         return data
@@ -80,44 +77,37 @@ const Menu = ({loadFromServer}) => {
         if (showEditRecipe && (typeof indexForEditing !== 'undefined' && indexForEditing !== null)) {
             let newArr = [...RecipeList]
             newArr[indexForEditing] = Recipe
-            const res = await fetch('https://recipe-planner-pw.herokuapp.com/RecipeList/' + Recipe._id,{
+            const res = await fetch('https://recipe-planner-pw.herokuapp.com/RecipeList/' + Recipe._id, {
                 method: 'PUT',
-                headers:{
+                headers: {
                     'Content-type': 'application/json',
                 },
                 body: JSON.stringify(newArr[indexForEditing])
             })
             const data = await res.json()
-            //setRecipeList(newArr)
-            //setRecipeList([data])
             load()
-            //setRecipeList([...RecipeList, data])
         }
         else {
-            // const res = await fetch('http://localhost:8080/RecipeList',{
-                console.log("Hello kurwa")
-                const res = await fetch('https://recipe-planner-pw.herokuapp.com/add-recipe',{
+            console.log("Hello kurwa")
+            const res = await fetch('https://recipe-planner-pw.herokuapp.com/add-recipe', {
                 method: 'POST',
-                headers:{
+                headers: {
                     'Content-type': 'application/json',
                 },
                 body: JSON.stringify(Recipe)
             })
             const data = await res.json()
-            //setRecipeList([...RecipeList, Recipe])
-            //setRecipeList([...RecipeList, data])
             load()
         }
 
         setShowAddRecipeForm(false)
         setShowRecipeData(false)
         setShowEditRecipe(false)
-        // console.log(JSON.stringify(RecipeList))
     }
     const handleRemoveRecipe = async (e, itemToDelete, index) => {
-         
+
         e.preventDefault();
-        await fetch(`https://recipe-planner-pw.herokuapp.com/RecipeList/${itemToDelete._id}`,{
+        await fetch(`https://recipe-planner-pw.herokuapp.com/RecipeList/${itemToDelete._id}`, {
             method: 'DELETE',
         })
         setRecipeList((prev) => prev.filter((item) => item !== prev[index]));
@@ -133,7 +123,7 @@ const Menu = ({loadFromServer}) => {
         setShowEditRecipe(false)
         setRecipeToBeShown(item)
     }
-    const handleEditRecipe = (e,item, index) => {
+    const handleEditRecipe = (e, item, index) => {
         e.preventDefault();
         setShowEditRecipe(true)
         setShowAddRecipeForm(true)
@@ -152,7 +142,6 @@ const Menu = ({loadFromServer}) => {
     }
     const handleAddRecipeForShopping = (e, item, index) => {
         e.preventDefault();
-        //setAddRecipeForShopping([item]);
         addRecipeForShopping ? setAddRecipeForShopping((prev) => [...prev, item]) : setAddRecipeForShopping([item]);
         let newArr = JSON.parse(JSON.stringify(item.IngredientListFiltered));
         // get rid of duplicates
@@ -229,21 +218,15 @@ const Menu = ({loadFromServer}) => {
                     ? [
                         RecipeList.length > 0
                             ? [
-                                <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} style={{backgroundColor: "#969696"}}>
+                                <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} style={{ backgroundColor: "#969696" }}>
                                     <Button style={{ textTransform: "none" }} onClick={load} endIcon={<CloudDownloadOutlinedIcon />}>Load</Button>
-                                    {/* <Button style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />}>Save </Button> */}
                                     <Button style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} onClick={(e) => { handleShopping(e) }}>Shopping </Button>
                                 </ButtonGroup>
                             ]
                             : [
-                                <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true}  style={{backgroundColor: "#969696"}}>
-                                    {/* {EmptyServer 
-                                    ?
-                                        <ButtonWithTooltip tooltipText="No available recipes found on the server! Create a new one." style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />} disabled>{"Load"}</ButtonWithTooltip>
-                                    : */}
-                                        <Button style={{ textTransform: "none" }} onClick={load} endIcon={<CloudDownloadOutlinedIcon />}>Load</Button>
-                                    {/* } */}
-                                    {/* <ButtonWithTooltip tooltipText="Add some recipes before saving" style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />} disabled>{"Save"} </ButtonWithTooltip> */}
+                                <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} style={{ backgroundColor: "#969696" }}>
+
+                                    <Button style={{ textTransform: "none" }} onClick={load} endIcon={<CloudDownloadOutlinedIcon />}>Load</Button>
                                     <ButtonWithTooltip tooltipText="Add some recipes before shopping" style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} disabled>
                                         {"Shopping"}
                                     </ButtonWithTooltip>
@@ -253,9 +236,8 @@ const Menu = ({loadFromServer}) => {
                             ]
                     ]
                     :
-                    <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true}  style={{backgroundColor: "#969696"}}>
+                    <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} style={{ backgroundColor: "#969696" }}>
                         <ButtonWithTooltip tooltipText="Close the shopping list before loading" style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />} disabled>{"Load"}</ButtonWithTooltip>
-                        {/* <ButtonWithTooltip tooltipText="Close the shopping list before saving" style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />} disabled>{"Save"} </ButtonWithTooltip> */}
                         {RecipeList.length > 0
                             ? <Button style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} onClick={(e) => { handleShopping(e) }}>Shopping </Button>
                             : <ButtonWithTooltip tooltipText="Add some recipes before shopping" style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} disabled>
@@ -330,7 +312,7 @@ const Menu = ({loadFromServer}) => {
                                 setShowRecipeData(false))}
                                 size="large"
                                 variant="contained"
-                                style={{backgroundColor: "#969696"}}
+                                style={{ backgroundColor: "#969696" }}
                                 fullWidth={true}
                                 style={{ textTransform: "none" }}
                             >
@@ -344,7 +326,7 @@ const Menu = ({loadFromServer}) => {
                             )}
                                 size="large"
                                 variant="contained"
-                                style={{backgroundColor: "#969696"}}
+                                style={{ backgroundColor: "#969696" }}
                                 fullWidth={true}
                                 style={{ textTransform: "none" }}
                             >
@@ -359,7 +341,7 @@ const Menu = ({loadFromServer}) => {
                             )}
                                 size="large"
                                 variant="contained"
-                                style={{backgroundColor: "#969696"}}
+                                style={{ backgroundColor: "#969696" }}
                                 fullWidth={true}
                                 style={{ textTransform: "none" }}
                             >
@@ -373,7 +355,7 @@ const Menu = ({loadFromServer}) => {
                                 setShowRecipeData(false))}
                                 size="large"
                                 variant="contained"
-                                style={{backgroundColor: "#969696"}}
+                                style={{ backgroundColor: "#969696" }}
                                 fullWidth={true}
                                 style={{ textTransform: "none" }}
                             >

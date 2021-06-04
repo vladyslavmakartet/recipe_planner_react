@@ -1,4 +1,3 @@
-import transitions from '@material-ui/core/styles/transitions';
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
 import { Item } from './Item';
@@ -33,5 +32,3 @@ export const CarouselMain = () => {
         </Carousel>
     )
 }
-
-//export function CarouselMain();
