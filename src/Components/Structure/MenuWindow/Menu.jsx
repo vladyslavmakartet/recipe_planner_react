@@ -15,7 +15,7 @@ import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 import MuiButton from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
-// import $ from 'jquery'; 
+
 
 const ButtonDisabled = withStyles({
     root: {
@@ -43,8 +43,6 @@ const Menu = ({loadFromServer}) => {
     const [showRecipeData, setShowRecipeData] = useState(false)
     const [showEditRecipe, setShowEditRecipe] = useState(false)
     const [showShopping, setShowShopping] = useState(false)
-
-    //const [EmptyServer, setEmptyServer] = useState(true)
     const [RecipeList, setRecipeList] = useState([])
     const [RecipeToBeShown, setRecipeToBeShown] = useState()
     const [RecipeToEdit, setRecipeToEdit] = useState()
@@ -53,13 +51,9 @@ const Menu = ({loadFromServer}) => {
     const [IngredientListForShopping, setIngredientListForShopping] = useState([])
 
     useEffect(() => {
-        // const getRecipes = async () => {
-        //     const recipesFromServer = await fetchRecipes()
-        //     setRecipeList(recipesFromServer)
-        // }
-        // getRecipes()
-        if(loadFromServer)
+        if(loadFromServer){
             load()
+        }
     }, [])
     const load = async ()=>
     {
@@ -75,18 +69,18 @@ const Menu = ({loadFromServer}) => {
     }
     // Fetch Recipes
     const fetchRecipes = async () => {
-        const res = await fetch('http://localhost:5000/RecipeList')
+        // const res = await fetch('http://localhost:8080/RecipeList')
+        const res = await fetch('https://recipe-planner-pw.herokuapp.com/RecipeList')
         const data = await res.json()
         return data
     }
-
 
     const addRecipe = async (Recipe) => {
 
         if (showEditRecipe && (typeof indexForEditing !== 'undefined' && indexForEditing !== null)) {
             let newArr = [...RecipeList]
             newArr[indexForEditing] = Recipe
-            const res = await fetch('http://localhost:5000/RecipeList/' + Recipe.id,{
+            const res = await fetch('https://recipe-planner-pw.herokuapp.com/RecipeList/' + Recipe._id,{
                 method: 'PUT',
                 headers:{
                     'Content-type': 'application/json',
@@ -95,11 +89,14 @@ const Menu = ({loadFromServer}) => {
             })
             const data = await res.json()
             //setRecipeList(newArr)
-            setRecipeList([data])
-            
+            //setRecipeList([data])
+            load()
+            //setRecipeList([...RecipeList, data])
         }
         else {
-            const res = await fetch('http://localhost:5000/RecipeList',{
+            // const res = await fetch('http://localhost:8080/RecipeList',{
+                console.log("Hello kurwa")
+                const res = await fetch('https://recipe-planner-pw.herokuapp.com/add-recipe',{
                 method: 'POST',
                 headers:{
                     'Content-type': 'application/json',
@@ -108,7 +105,8 @@ const Menu = ({loadFromServer}) => {
             })
             const data = await res.json()
             //setRecipeList([...RecipeList, Recipe])
-            setRecipeList([...RecipeList, data])
+            //setRecipeList([...RecipeList, data])
+            load()
         }
 
         setShowAddRecipeForm(false)
@@ -119,7 +117,7 @@ const Menu = ({loadFromServer}) => {
     const handleRemoveRecipe = async (e, itemToDelete, index) => {
          
         e.preventDefault();
-        await fetch(`http://localhost:5000/RecipeList/${itemToDelete.id}`,{
+        await fetch(`https://recipe-planner-pw.herokuapp.com/RecipeList/${itemToDelete._id}`,{
             method: 'DELETE',
         })
         setRecipeList((prev) => prev.filter((item) => item !== prev[index]));
@@ -154,7 +152,10 @@ const Menu = ({loadFromServer}) => {
     }
     const handleAddRecipeForShopping = (e, item, index) => {
         e.preventDefault();
+        //setAddRecipeForShopping([item]);
+        addRecipeForShopping ? setAddRecipeForShopping((prev) => [...prev, item]) : setAddRecipeForShopping([item]);
         let newArr = JSON.parse(JSON.stringify(item.IngredientListFiltered));
+        // get rid of duplicates
         newArr = newArr.reduce((a, c) => {
             var same = a.find(v => v.ingredientName == c.ingredientName && v.ingredientUnit == c.ingredientUnit);
             if (same) {
@@ -164,49 +165,30 @@ const Menu = ({loadFromServer}) => {
             }
             return a;
         }, []);
-        if (addRecipeForShopping && addRecipeForShopping.length > 0) {
-            let pushed = false
-            let oldArray = JSON.parse(JSON.stringify(IngredientListForShopping));
-            for (let i = 0; i < oldArray.length; i++) {
-                for (let j = 0; j < newArr.length; j++) {
-                    const exists = Boolean(oldArray.find(x => x.ingredientName === newArr[j].ingredientName && x.ingredientUnit === newArr[j].ingredientUnit))
-                    if (exists) {
-                        if (oldArray[i].ingredientName === newArr[j].ingredientName && oldArray[i].ingredientUnit === newArr[j].ingredientUnit) {
-                            oldArray[i].ingredientQuantity = parseFloat(oldArray[i].ingredientQuantity) + parseFloat(newArr[j].ingredientQuantity)
-                        }
-                    }
-                    else {
-                        oldArray.push(newArr[j])
-                        pushed = true
-                        break
-                    }
-                }
-                if(pushed) break
-            }
-
-
-
-
-
-            setAddRecipeForShopping((prev) => [...prev, item]);
-            oldArray.sort((a, b) => (a.ingredientName > b.ingredientName) ? 1 : -1)
-            setIngredientListForShopping(oldArray)
-
-        }
-        else {
-            setAddRecipeForShopping([item]);
+        if (!IngredientListForShopping || IngredientListForShopping.length === 0) {
             newArr.sort((a, b) => (a.ingredientName > b.ingredientName) ? 1 : -1)
             setIngredientListForShopping(newArr)
         }
-
+        else {
+            let oldArray = JSON.parse(JSON.stringify(IngredientListForShopping));
+            for (let i = 0; i < newArr.length; i++) {
+                if (oldArray.some(x => x.ingredientName === newArr[i].ingredientName && x.ingredientUnit === newArr[i].ingredientUnit)) {
+                    const indexValue = oldArray.findIndex(x => x.ingredientName === newArr[i].ingredientName && x.ingredientUnit === newArr[i].ingredientUnit)
+                    if (indexValue !== (-1)) {
+                        oldArray[indexValue].ingredientQuantity = Math.round(((parseFloat(oldArray[indexValue].ingredientQuantity) + parseFloat(newArr[i].ingredientQuantity)) + Number.EPSILON) * 100) / 100;
+                    }
+                }
+                else {
+                    oldArray.push(newArr[i])
+                }
+            }
+            oldArray.sort((a, b) => (a.ingredientName > b.ingredientName) ? 1 : -1)
+            setIngredientListForShopping(oldArray)
+        }
     }
     const RemoveRecipeFromShopping = (index) => {
-
-
-
         const newArr2 = [...addRecipeForShopping]
-        newArr2.splice(index, 1)
-        setAddRecipeForShopping(newArr2);
+        // get rid of duplicates
         let newArr = JSON.parse(JSON.stringify(addRecipeForShopping[index].IngredientListFiltered));
         newArr = newArr.reduce((a, c) => {
             var same = a.find(v => v.ingredientName == c.ingredientName && v.ingredientUnit == c.ingredientUnit);
@@ -218,19 +200,24 @@ const Menu = ({loadFromServer}) => {
             return a;
         }, []);
 
-        if (IngredientListForShopping && IngredientListForShopping.length > 0) {
+        if (IngredientListForShopping && IngredientListForShopping.length !== 0) {
             let oldArray = JSON.parse(JSON.stringify(IngredientListForShopping));
-            for (let i = 0; i < oldArray.length; i++) {
-                for (let j = 0; j < newArr.length; j++) {
-                    if (oldArray[i].ingredientName == newArr[j].ingredientName && oldArray[i].ingredientUnit == newArr[j].ingredientUnit) {
-                        oldArray[i].ingredientQuantity = parseFloat(oldArray[i].ingredientQuantity) - parseFloat(newArr[j].ingredientQuantity)
-                        if (parseFloat(oldArray[i].ingredientQuantity) <= 0)
-                            oldArray.splice(i, 1)
+            for (let i = 0; i < newArr.length; i++) {
+                if (oldArray.some(x => x.ingredientName === newArr[i].ingredientName && x.ingredientUnit === newArr[i].ingredientUnit)) {
+                    const indexValue = oldArray.findIndex(x => x.ingredientName === newArr[i].ingredientName && x.ingredientUnit === newArr[i].ingredientUnit)
+                    if (indexValue !== (-1)) {
+                        oldArray[indexValue].ingredientQuantity = Math.round(((parseFloat(oldArray[indexValue].ingredientQuantity) - parseFloat(newArr[i].ingredientQuantity)) + Number.EPSILON) * 100) / 100;
+                        if (oldArray[indexValue].ingredientQuantity <= 0)
+                            oldArray.splice(indexValue, 1)
                     }
                 }
             }
+
             setIngredientListForShopping(oldArray)
         }
+        newArr2.splice(index, 1)
+        setAddRecipeForShopping(newArr2);
+
     }
 
     return (

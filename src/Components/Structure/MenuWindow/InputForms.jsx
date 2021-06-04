@@ -55,13 +55,13 @@ const InputForms = ({ onAdd, RecipeToBeEdited }) => {
             return item
         });
         if(!RecipeToBeEdited){
-            const id = Math.floor(Math.random() * 10000) + 1
-            onAdd({ id, recipeName, recipeDescription, IngredientListFiltered })
+            //const _id = Math.floor(Math.random() * 10000) + 1
+            onAdd({recipeName, recipeDescription, IngredientListFiltered })
         }
         else
         {
-            const id = RecipeToBeEdited.id
-            onAdd({ id, recipeName, recipeDescription, IngredientListFiltered })
+            const _id = RecipeToBeEdited._id
+            onAdd({ _id, recipeName, recipeDescription, IngredientListFiltered })
         }
         RecipeToBeEdited ? alert('The recipe has been modified!'): alert('The recipe has been added!')
     }
