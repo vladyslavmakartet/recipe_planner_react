@@ -96,7 +96,7 @@ img {
     margin: 50px auto;
     border: 2px solid black;
     padding: 30px;
-    background-color: rgba(133, 135, 134, 0.97);
+    background-color: rgba(149, 176, 183, 0.97);
     /*whitesmoke*/
     border-radius: 10px;
 }
@@ -310,7 +310,7 @@ border-color: transparent black transparent transparent;
 }
 
 .threeD {
-    color: darkgrey;
+    color: #636363;
     white-space: nowrap;
     /* position: absolute;
     top: 50%;
@@ -320,13 +320,13 @@ border-color: transparent black transparent transparent;
     font-family: sans-serif;
     letter-spacing: 0.1em;
     transition: 0.3s;
-    text-shadow: 1px 1px 0 grey, 1px 2px 0 grey, 1px 3px 0 grey, 1px 4px 0 grey, 1px 5px 0 grey, 1px 6px 0 grey, 1px 7px 0 grey, 1px 8px 0 grey, 5px 13px 15px black;
+    text-shadow: 1px 1px 0 #969696, 1px 2px 0 #969696, 1px 3px 0 #969696, 1px 4px 0 #969696, 1px 5px 0 #969696, 1px 6px 0 #969696, 1px 7px 0 #969696, 1px 8px 0 #969696, 5px 13px 15px whitesmoke;
 }
 
 .threeD:hover {
     transition: 0.3s;
     /* transform: scale(1.1)translate(-50%, -50%); */
-    text-shadow: 1px -1px 0 grey, 1px -2px 0 grey, 1px -3px 0 grey, 1px -4px 0 grey, 1px -5px 0 grey, 1px -6px 0 grey, 1px -7px 0 grey, 1px -8px 0 grey, 5px -13px 15px black, 5px -13px 25px #808080;
+    text-shadow: 1px -1px 0 #969696, 1px -2px 0 #969696, 1px -3px 0 #969696, 1px -4px 0 #969696, 1px -5px 0 #969696, 1px -6px 0 #969696, 1px -7px 0 #969696, 1px -8px 0 #969696, 5px -13px 15px whitesmoke, 5px -13px 25px whitesmoke;
 }
 
 .content {
@@ -337,8 +337,10 @@ border-color: transparent black transparent transparent;
 .header {
     text-align: center;
     text-transform: uppercase;
-    margin-bottom: 25px;
-    color: #4CAF50;
+    /* margin-bottom: 25px; */
+    font-size: 20px;
+    font-weight: 550;
+    padding-bottom: 0;
 }
 
 .paragraph {
@@ -355,4 +357,16 @@ border-color: transparent black transparent transparent;
 .link {
     text-decoration: none;
     color: #008CBA;
+}
+.title {
+    text-align: left;
+    font-size: 35px;
+    font-weight: 450;
+    padding-bottom: 0;
+}
+.list {
+    list-style: inside;
+    /* list-style-type: circle; */
+    margin-left: 20px;
+
 }

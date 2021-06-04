@@ -229,14 +229,14 @@ const Menu = ({loadFromServer}) => {
                     ? [
                         RecipeList.length > 0
                             ? [
-                                <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} color="primary">
+                                <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} style={{backgroundColor: "#969696"}}>
                                     <Button style={{ textTransform: "none" }} onClick={load} endIcon={<CloudDownloadOutlinedIcon />}>Load</Button>
                                     {/* <Button style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />}>Save </Button> */}
                                     <Button style={{ textTransform: "none" }} endIcon={<ShoppingCartOutlinedIcon />} onClick={(e) => { handleShopping(e) }}>Shopping </Button>
                                 </ButtonGroup>
                             ]
                             : [
-                                <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} color="primary">
+                                <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true}  style={{backgroundColor: "#969696"}}>
                                     {/* {EmptyServer 
                                     ?
                                         <ButtonWithTooltip tooltipText="No available recipes found on the server! Create a new one." style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />} disabled>{"Load"}</ButtonWithTooltip>
@@ -253,7 +253,7 @@ const Menu = ({loadFromServer}) => {
                             ]
                     ]
                     :
-                    <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true} color="primary">
+                    <ButtonGroup size="large" aria-label="small button group" variant="contained" fullWidth={true}  style={{backgroundColor: "#969696"}}>
                         <ButtonWithTooltip tooltipText="Close the shopping list before loading" style={{ textTransform: "none" }} endIcon={<CloudDownloadOutlinedIcon />} disabled>{"Load"}</ButtonWithTooltip>
                         {/* <ButtonWithTooltip tooltipText="Close the shopping list before saving" style={{ textTransform: "none" }} endIcon={<CloudUploadOutlinedIcon />} disabled>{"Save"} </ButtonWithTooltip> */}
                         {RecipeList.length > 0
@@ -330,7 +330,7 @@ const Menu = ({loadFromServer}) => {
                                 setShowRecipeData(false))}
                                 size="large"
                                 variant="contained"
-                                color="primary"
+                                style={{backgroundColor: "#969696"}}
                                 fullWidth={true}
                                 style={{ textTransform: "none" }}
                             >
@@ -344,7 +344,7 @@ const Menu = ({loadFromServer}) => {
                             )}
                                 size="large"
                                 variant="contained"
-                                color="primary"
+                                style={{backgroundColor: "#969696"}}
                                 fullWidth={true}
                                 style={{ textTransform: "none" }}
                             >
@@ -359,7 +359,7 @@ const Menu = ({loadFromServer}) => {
                             )}
                                 size="large"
                                 variant="contained"
-                                color="primary"
+                                style={{backgroundColor: "#969696"}}
                                 fullWidth={true}
                                 style={{ textTransform: "none" }}
                             >
@@ -373,7 +373,7 @@ const Menu = ({loadFromServer}) => {
                                 setShowRecipeData(false))}
                                 size="large"
                                 variant="contained"
-                                color="primary"
+                                style={{backgroundColor: "#969696"}}
                                 fullWidth={true}
                                 style={{ textTransform: "none" }}
                             >

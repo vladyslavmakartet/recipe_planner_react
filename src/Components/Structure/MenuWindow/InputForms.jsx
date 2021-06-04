@@ -3,9 +3,37 @@ import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import TextField from '@material-ui/core/TextField';
-import { useState} from 'react'
+import { useState } from 'react'
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { fade, ThemeProvider, withStyles, makeStyles, createMuiTheme, } from '@material-ui/core/styles';
+
+
+const CssTextField = withStyles({
+    root: {
+        '& label.Mui-focused': {
+            color: 'black',
+        },
+        '& .MuiInput-underline:after': {
+            borderBottomColor: 'black',
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: '#7e8ca7',
+            },
+            '&:hover fieldset': {
+                borderColor: 'black',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: '#969696',
+            },
+        },
+    },
+})(TextField);
+
+
+
+
 const InputForms = ({ onAdd, RecipeToBeEdited }) => {
 
     const [recipeName, setRecipeName] = useState(RecipeToBeEdited ? RecipeToBeEdited.recipeName : '')
@@ -54,16 +82,15 @@ const InputForms = ({ onAdd, RecipeToBeEdited }) => {
             delete item.errors;
             return item
         });
-        if(!RecipeToBeEdited){
+        if (!RecipeToBeEdited) {
             //const _id = Math.floor(Math.random() * 10000) + 1
-            onAdd({recipeName, recipeDescription, IngredientListFiltered })
+            onAdd({ recipeName, recipeDescription, IngredientListFiltered })
         }
-        else
-        {
+        else {
             const _id = RecipeToBeEdited._id
             onAdd({ _id, recipeName, recipeDescription, IngredientListFiltered })
         }
-        RecipeToBeEdited ? alert('The recipe has been modified!'): alert('The recipe has been added!')
+        RecipeToBeEdited ? alert('The recipe has been modified!') : alert('The recipe has been added!')
     }
 
     const handleAddIngredient = (e) => {
@@ -116,7 +143,7 @@ const InputForms = ({ onAdd, RecipeToBeEdited }) => {
         <>
             <form onSubmit={onSubmit} id="Recipe" className="WordWrap">
                 <Grid container className="scrollbar " id="style-4" >
-                    <TextField
+                    <CssTextField
                         id="outlined-full-width"
                         label="Name"
                         placeholder="e.g Kebab"
@@ -129,7 +156,7 @@ const InputForms = ({ onAdd, RecipeToBeEdited }) => {
                         onChange={(e) => setRecipeName(e.target.value)}
                         variant="outlined"
                     />
-                    <TextField
+                    <CssTextField
                         id="outlined-multiline-static"
                         label="Description"
                         multiline
@@ -158,7 +185,7 @@ const InputForms = ({ onAdd, RecipeToBeEdited }) => {
 
                                 </Grid>
                                 <Grid item xs>
-                                    <TextField
+                                    <CssTextField
                                         required
                                         label="Name"
                                         placeholder="e.g Meat"
@@ -175,7 +202,7 @@ const InputForms = ({ onAdd, RecipeToBeEdited }) => {
                                     />
                                 </Grid>
                                 <Grid item xs >
-                                    <TextField
+                                    <CssTextField
                                         label="Quantity"
                                         type="number"
                                         placeholder="e.g 10"
@@ -199,13 +226,14 @@ const InputForms = ({ onAdd, RecipeToBeEdited }) => {
                                     />
                                 </Grid>
                                 <Grid item xs >
-                                    <TextField
+                                    <CssTextField
                                         required
                                         label="Unit"
                                         placeholder="e.g Kg"
                                         variant="outlined"
                                         name="ingredientUnit"
                                         className="paragraph"
+
                                         //error={item.errors.ingredientUnit ? true : false}
 
                                         // className={
@@ -219,7 +247,7 @@ const InputForms = ({ onAdd, RecipeToBeEdited }) => {
                                     />
                                 </Grid>
                                 <Grid item >
-                                    <IconButton aria-label="delete" color="primary" onClick={(e) => handleRemoveIngredient(e, index)}>
+                                    <IconButton aria-label="delete" color="secondary" onClick={(e) => handleRemoveIngredient(e, index)}>
                                         <DeleteIcon />
                                     </IconButton>
                                 </Grid>
@@ -230,9 +258,9 @@ const InputForms = ({ onAdd, RecipeToBeEdited }) => {
 
                 </div>
 
-                <ButtonGroup color="primary" aria-label="outlined primary button group" fullWidth={true} style={{ marginTop: "10px" }}>
-                    <Button onClick={handleAddIngredient} type="submit" form="Ingredient" size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Add ingredient</Button>
-                    <Button type="submit" form="Recipe" size="large" variant="contained" color="primary" fullWidth={true} style={{ textTransform: "none" }}>Save recipe</Button>
+                <ButtonGroup style={{ backgroundColor: "#969696" }} aria-label="outlined primary button group" fullWidth={true} style={{ marginTop: "10px" }}>
+                    <Button onClick={handleAddIngredient} type="submit" form="Ingredient" size="large" variant="contained" fullWidth={true} style={{ textTransform: "none" }}>Add ingredient</Button>
+                    <Button type="submit" form="Recipe" size="large" variant="contained" fullWidth={true} style={{ textTransform: "none" }}>Save recipe</Button>
                 </ButtonGroup>
 
 
