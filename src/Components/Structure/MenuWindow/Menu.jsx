@@ -67,7 +67,7 @@ const Menu = ({ loadFromServer }) => {
     }
     // Fetch Recipes
     const fetchRecipes = async () => {
-        const res = await fetch('https://recipe-planner-pw.herokuapp.com/RecipeList')
+        const res = await fetch('https://recipe-planner-pw.netlify.app/RecipeList')
         const data = await res.json()
         return data
     }
@@ -77,7 +77,7 @@ const Menu = ({ loadFromServer }) => {
         if (showEditRecipe && (typeof indexForEditing !== 'undefined' && indexForEditing !== null)) {
             let newArr = [...RecipeList]
             newArr[indexForEditing] = Recipe
-            const res = await fetch('https://recipe-planner-pw.herokuapp.com/RecipeList/' + Recipe._id, {
+            const res = await fetch('https://recipe-planner-pw.netlify.app/RecipeList/' + Recipe._id, {
                 method: 'PUT',
                 headers: {
                     'Content-type': 'application/json',
@@ -89,7 +89,7 @@ const Menu = ({ loadFromServer }) => {
         }
         else {
             console.log("Hello kurwa")
-            const res = await fetch('https://recipe-planner-pw.herokuapp.com/add-recipe', {
+            const res = await fetch('https://recipe-planner-pw.netlify.app/add-recipe', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json',
@@ -107,7 +107,7 @@ const Menu = ({ loadFromServer }) => {
     const handleRemoveRecipe = async (e, itemToDelete, index) => {
 
         e.preventDefault();
-        await fetch(`https://recipe-planner-pw.herokuapp.com/RecipeList/${itemToDelete._id}`, {
+        await fetch(`https://recipe-planner-pw.netlify.app/RecipeList/${itemToDelete._id}`, {
             method: 'DELETE',
         })
         setRecipeList((prev) => prev.filter((item) => item !== prev[index]));
