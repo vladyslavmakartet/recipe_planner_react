@@ -19,7 +19,7 @@ function App() {
           <Grid item >
             <div className="btn">
               <CreateButtonMain onCreate={() => setShowCreateRecipe(!showCreateRecipe)} />
-              <LoadButtonMain onLoad={() => {setShowCreateRecipe(!showCreateRecipe), setLoadFromServer(!loadFromServer)}}/>
+              <LoadButtonMain onLoad={() => {return setShowCreateRecipe(!showCreateRecipe), setLoadFromServer(!loadFromServer)}}/>
             </div>
           </Grid>
         </Grid>}
